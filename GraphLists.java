@@ -3,7 +3,7 @@
  * 
  * Start Date: 25/03/2024
  * 
- * Author: Daniel Ortega Lloret C22726225
+ * Author: Daniel Ortega Lloret C22726225, Dylan Orourke C22341463
  */
 // Uses an Adjacency Linked Lists, suitable for sparse graphs
 
@@ -257,6 +257,36 @@ class Graph
         
     }
 
+    public void breadthFirst(int s)
+    {
+        // Make The Distance Array, And Parent Array
+        int[]  dist, parent;
+        dist = new int[V];
+        parent = new int[V];
+
+
+        // Set All Vertices To White
+        for (int i = 0; i < V; i++)
+        {
+            visited[i] = 0;
+            dist[i] = Integer.MAX_VALUE;
+            parent[i] = 0;
+        }
+
+        // Make First Vertex Grey
+        visited[s] = 1;
+        dist[s] = 0;
+        parent[s] = 0;
+
+        //ENQUEUE(Q, s)
+        //while Q isnt empty
+        // u = DEQUEUE(Q)
+        for (int v : adj)
+        {
+            
+        }
+    }
+
     public void DF_Show(int v)
     {
         
@@ -399,7 +429,7 @@ public class GraphLists
 
         //g.SPT_Dijkstra(choice); 
         //g.MST_Prim(choice);  
-        g.DF_Show(choice);
-        //g.breadthFirst(s);             
+        //g.DF_Show(choice);
+        g.breadthFirst(choice);             
     }
 }
