@@ -9,6 +9,8 @@
 
 import java.io.*;
 
+enum C {White, Grey, Black};
+
 class Heap
 {
     private int[] a;	   // heap array
@@ -128,8 +130,12 @@ class Graph
     
     // used for traversing graph
     private int[] visited;
+    private C[] colour;
+    private int time;
     private int id;
     
+    //For storing the traversal tree and distance from starting vertex
+    private int[] parent, d, f;
     
     // default constructor
     public Graph(String graphFile)  throws IOException
@@ -257,91 +263,98 @@ class Graph
         
     }
 
-    public void DF_Show(int v)
-    {
-        
-        df = new Node[1];  
-        df[0] = z;
-
-        System.out.println("\nPerforming Recursive Depth-First Search Traversal:\n");
-
-        DF(v);
-
-        Node printer = df[0];
-
-        for (int i = 0; i < V; i++)
-        {
-            System.out.println(toChar(printer.vert) + " -> " + toChar(printer.next.vert));
-            printer = printer.next;
-        }
-        
-    }
-
     //Recursive Depth-First Traversal
-    public void DF(int v)
+    public void DF(int s)
     {
-        int[] neighbors = NeighborCount(v);
+        //Old Code
+    //     int[] neighbors = NeighborCount(v);
         
-        if (visited[v] == 1)
+    //     if (visited[v] == 1)
+    //     {
+    //         return;
+    //     }
+
+    //     visited[v] = 1;
+    //     if (df[0] == z)
+    //     {
+    //         df[0] = adj[v];
+    //         df[0].next = z;
+    //     }
+    //     else
+    //     {
+    //         df[0].next = adj[v];
+    //     }
+
+    //    for (int u : neighbors)
+    //    {
+    //         if (visited[u] == 0)
+    //         {
+    //             DF(u);
+    //         }
+    //    }
+        
+        int v;
+        for (v = 1; v <= V; ++v)
         {
-            return;
+            colour[v] = C.White;
+            parent[v] = 0;
         }
 
-        visited[v] = 1;
-        if (df[0] == z)
-        {
-            df[0] = adj[v];
-            df[0].next = z;
-        }
-        else
-        {
-            df[0].next = adj[v];
-        }
+        System.out.println("\nDepth First Graph Traversal\n");
+        System.out.println("Starting with Vertex " + toChar(s));
 
-       for (int u : neighbors)
-       {
-            if (visited[u] == 0)
-            {
-                DF(u);
-            }
-       }
-            
+        time = 0;
+        dfVisit(s);
+
+        System.out.print("\n\n");
     }
 
-    public int[] NeighborCount(int v)
+    private void dfVisit( int v)
     {
-        int[] neighbors;
-        int size = 0;
-        Node p = adj[v].next;
-        //Find out how many neighbors there are
-        while (p != z)
-        {
-            size++;
-            p = p.next;
-        }
+        int u;
+        ++time;
+        d[v] = time;
+        colour[v] = C.Grey;
 
-        neighbors = new int[size];
-        p = adj[v].next; //Reset p
+        System.out.println("\n DF just visited vertex " + toChar(v) + " along edge " + toChar(parent[v]) + "--" + toChar(v));
 
-        //Fill out integer list with all the neighbors
-        if (p == z)
-        {
-            return neighbors;
-        }
-        else
-        {
-            for (int i = 0; i < neighbors.length; ++i)
-            {
-                if (p == z)
-                {
-                    break;
-                }
-                neighbors[i] = p.vert;
-                p = p.next;
-            }
-            return neighbors;
-        }
+        //some missing code
     }
+
+    // public int[] NeighborCount(int v)
+    // {
+    //     int[] neighbors;
+    //     int size = 0;
+    //     Node p = adj[v].next;
+    //     //Find out how many neighbors there are
+    //     while (p != z)
+    //     {
+    //         size++;
+    //         p = p.next;
+    //     }
+
+    //     neighbors = new int[size];
+    //     p = adj[v].next; //Reset p
+
+    //     //Fill out integer list with all the neighbors
+    //     if (p == z)
+    //     {
+    //         return neighbors;
+    //     }
+    //     else
+    //     {
+    //         for (int i = 0; i < neighbors.length; ++i)
+    //         {
+    //             if (p == z)
+    //             {
+    //                 break;
+    //             }
+    //             neighbors[i] = p.vert;
+    //             p = p.next;
+    //         }
+    //         return neighbors;
+    //     }
+    // }
 }
 
 public class GraphLists
@@ -399,7 +412,7 @@ public class GraphLists
 
         //g.SPT_Dijkstra(choice); 
         //g.MST_Prim(choice);  
-        g.DF_Show(choice);
+        g.DF(choice);
         //g.breadthFirst(s);             
     }
 }
