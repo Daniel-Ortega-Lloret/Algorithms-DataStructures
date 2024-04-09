@@ -224,6 +224,23 @@ class Graph
         }
         System.out.println("");
     }
+
+    //Displays adjacency list representation of the spanning tree returned by any one algorithm
+    public void showAlg(Node[] list)
+    {
+        int v;
+        Node n;
+        
+        for(v=1; v<=V; ++v)
+        {
+            System.out.print("\nadj[" + toChar(v) + "] ->" );
+            for(n = list[v]; n != z; n = n.next) 
+            {
+                System.out.print(" " + toChar(n.vert) + " -> ");   
+            }
+        }
+        System.out.println("");
+    }
     
     //Prim's Algorithm
 	public void MST_Prim(int s)
@@ -295,7 +312,10 @@ class Graph
             }
         }
 
-        ShowDF(parent);
+        Node[] inOrder = ParentInOrder(parent);
+        System.out.println("\n\nThe minimum spanning tree found by Depth-First Search is:\n");
+
+        showAlg(inOrder);
         
         System.out.print("\n\n");
     }
@@ -321,25 +341,6 @@ class Graph
         colour[u] = C.Black;
         ++time;
         f[u] = time;
-    }
-    
-    public void ShowDF(int[] parent)
-    {
-        Node[] inOrder = ParentInOrder(parent);
-        System.out.println("\n\nThe minimum spanning tree found by Depth-First Search is:\n");
-
-        int v;
-        Node n;
-        
-        for(v=1; v<=V; ++v)
-        {
-            System.out.print("\nadj[" + toChar(v) + "] ->" );
-            for(n = inOrder[v]; n != z; n = n.next) 
-            {
-                System.out.print(" " + toChar(n.vert) + " -> ");   
-            }
-        }
-        System.out.println("");
     }
 
     //Function to return an adjacency list with the spanning tree
