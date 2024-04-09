@@ -278,13 +278,25 @@ class Graph
         dist[s] = 0;
         parent[s] = 0;
 
-        //ENQUEUE(Q, s)
+        //ENQUEUE(Q, s);
         //while Q isnt empty
-        // u = DEQUEUE(Q)
-        for (int v : adj)
+        // u = DEQUEUE(Q);
+
+        int[] Neighbors = NeighborCount(u);
+        // For Every Child Of U
+        for (int v : Neighbors)
         {
-            
+            // If Child Is White
+            if (visited[v] == 0)
+            {
+                visited[v] = 1;
+                dist[v] = dist[u] + 1;
+                parent[v] = u;
+                //ENQUEUE(Q, v);
+            }
         }
+        // When Done With Parent Make It Black
+        visited[u] = 2;
     }
 
     public void DF_Show(int v)
