@@ -140,6 +140,7 @@ class Graph
     
     //For storing the traversal tree and distance from starting vertex
     private int[] parent, d, f;
+    private int[] inOrder;
     
     // default constructor
     public Graph(String graphFile)  throws IOException
@@ -275,7 +276,7 @@ class Graph
         parent = new int[V+1];
         d = new int[V+1];
         f = new int[V+1];
-
+        inOrder = new int[V+1];
         for (v = 1; v <= V; ++v)
         {
             colour[v] = C.White;
@@ -308,7 +309,6 @@ class Graph
 
         System.out.println("\n DF just visited vertex " + toChar(u) + " along edge " + toChar(parent[u]) + "--" + toChar(u));
 
-        //some missing code
         for ( int v : neighbors)
         {
             if (colour[v] == C.White)
@@ -325,12 +325,51 @@ class Graph
     
     public void ShowDF(int[] parent)
     {
+        Node[] inOrder = ParentInOrder(parent);
         System.out.println("\n\nThe minimum spanning tree found by Depth-First Search is:\n");
 
-        for(int v = V; v >= 0; --v)
+        int v;
+        Node n;
+        
+        for(v=1; v<=V; ++v)
         {
-            System.out.print(toChar(parent[v]) + " -> " );
+            System.out.print("\nadj[" + toChar(v) + "] ->" );
+            for(n = inOrder[v]; n != z; n = n.next) 
+            {
+                System.out.print(" " + toChar(n.vert) + " -> ");   
+            }
         }
+        System.out.println("");
+    }
+
+    //Function to return an adjacency list with the spanning tree
+    public Node[] ParentInOrder(int[] parent)
+    {
+        int v;
+        int j;
+        Node[] inOrder = new Node[V+1];
+
+        for (v = 1; v <= V; ++v)
+        {
+            inOrder[v] = z;
+        }
+
+
+        for (v = 1; v <= V; ++v)
+        {
+            for (j = 1; j <= V; ++j)
+            {
+                if (parent[j] == v)
+                {
+                    Node p = new Node();
+                    p.vert = j;
+                    p.next = inOrder[v];
+                    inOrder[v] = p;
+                }
+            }
+        }
+
+        return inOrder;
     }
 
     //Function that returns a list of the numeric representation of all the vertices connected to the given vertex
