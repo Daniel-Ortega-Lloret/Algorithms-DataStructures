@@ -3,11 +3,18 @@
  * 
  * Start Date: 25/03/2024
  * 
- * Author: Daniel Ortega Lloret C22726225, Dylan Orourke C22341463
+ * Authors: 
+ *  Daniel Ortega Lloret C22726225
+ *  Dylan O'rourke
+ *  Ciaran Coyne
+ *  George Crossan
  */
+
 // Uses an Adjacency Linked Lists, suitable for sparse graphs
 
 import java.io.*;
+
+enum C {White, Gray, Black};
 
 class Heap
 {
@@ -169,12 +176,16 @@ class Graph
     private Node[] adj;
     private Node z;
     private int[] mst;
-    private Node[] df;
     
     // used for traversing graph
     private int[] visited;
+    private C[] colour;
+    private int time;
     private int id;
     
+    //For storing the traversal tree and distance from starting vertex
+    private int[] parent, d, f;
+    private int[] inOrder;
     
     // default constructor
     public Graph(String graphFile)  throws IOException
@@ -201,7 +212,7 @@ class Graph
         // create adjacency lists, initialized to sentinel node z     
         //Initialize visited to size of given graph  
         adj = new Node[V+1];    
-        visited = new int[V+1];    
+        visited = new int[V+1];  
         for(v = 1; v <= V; ++v)
         {
             adj[v] = z;  
@@ -307,8 +318,8 @@ class Graph
         // Make The Distance Array, And Parent Array
         int[]  dist, parent;
         int[] Neighbors;
-        dist = new int[V];
-        parent = new int[V];
+        dist = new int[V+1];
+        parent = new int[V + 1];
         Neighbors = new int[V];
 
         // Used For Storing Dequeued Value
@@ -334,7 +345,7 @@ class Graph
         while (!Q.isEmpty())
         {
             u = Q.deQueue();
-            System.out.println("Dequeued " + u + " From Queue\n");
+            System.out.println("Dequeued " + u + " From Queue.\n");
 
             Neighbors = NeighborCount(u);
             // For Every Child Of U
@@ -357,71 +368,125 @@ class Graph
         
     }
 
-    public void DF_Show(int v)
-    {
-        
-        df = new Node[1];  
-        df[0] = z;
-
-        System.out.println("\nPerforming Recursive Depth-First Search Traversal:\n");
-
-        DF(v);
-
-        Node printer = df[0];
-
-        for (int i = 0; i < V; i++)
-        {
-            System.out.println(toChar(printer.vert) + " -> " + toChar(printer.next.vert));
-            printer = printer.next;
-        }
-        
-    }
-
     //Recursive Depth-First Traversal
-    public void DF(int v)
+    public void DF(int s)
     {
-        int[] neighbors = NeighborCount(v);
-        
-        if (visited[v] == 1)
+        int v;
+        colour = new C[V+1];
+        parent = new int[V+1];
+        d = new int[V+1];
+        f = new int[V+1];
+        inOrder = new int[V+1];
+        for (v = 1; v <= V; ++v)
         {
-            return;
+            colour[v] = C.White;
+            parent[v] = 0;
         }
 
-        visited[v] = 1;
-        if (df[0] == z)
-        {
-            df[0] = adj[v];
-            df[0].next = z;
-        }
-        else
-        {
-            df[0].next = adj[v];
-        }
+        System.out.println("\nDepth First Graph Traversal\n");
+        System.out.println("Starting with Vertex " + toChar(s));
 
-       for (int u : neighbors)
-       {
-            if (visited[u] == 0)
+        time = 0;
+        for (v = 1; v <= V; ++v)
+        {
+            if (colour[v] == C.White)
             {
-                DF(u);
+                dfVisit(s);
             }
-       }
-            
+        }
+
+        ShowDF(parent);
+        
+        System.out.print("\n\n");
     }
 
+    private void dfVisit( int u)
+    {
+        int[] neighbors = NeighborCount(u);
+        ++time;
+        d[u] = time;
+        colour[u] = C.Gray;
+
+        System.out.println("\n DF just visited vertex " + toChar(u) + " along edge " + toChar(parent[u]) + "--" + toChar(u));
+
+        for ( int v : neighbors)
+        {
+            if (colour[v] == C.White)
+            {
+                parent[v] = u;
+                dfVisit(v);
+            }
+        }
+
+        colour[u] = C.Black;
+        ++time;
+        f[u] = time;
+    }
+    
+    public void ShowDF(int[] parent)
+    {
+        Node[] inOrder = ParentInOrder(parent);
+        System.out.println("\n\nThe minimum spanning tree found by Depth-First Search is:\n");
+
+        int v;
+        Node n;
+        
+        for(v=1; v<=V; ++v)
+        {
+            System.out.print("\nadj[" + toChar(v) + "] ->" );
+            for(n = inOrder[v]; n != z; n = n.next) 
+            {
+                System.out.print(" " + toChar(n.vert) + " -> ");   
+            }
+        }
+        System.out.println("");
+    }
+
+    //Function to return an adjacency list with the spanning tree
+    public Node[] ParentInOrder(int[] parent)
+    {
+        int v;
+        int j;
+        Node[] inOrder = new Node[V+1];
+
+        for (v = 1; v <= V; ++v)
+        {
+            inOrder[v] = z;
+        }
+
+
+        for (v = 1; v <= V; ++v)
+        {
+            for (j = 1; j <= V; ++j)
+            {
+                if (parent[j] == v)
+                {
+                    Node p = new Node();
+                    p.vert = j;
+                    p.next = inOrder[v];
+                    inOrder[v] = p;
+                }
+            }
+        }
+
+        return inOrder;
+    }
+
+    //Function that returns a list of the numeric representation of all the vertices connected to the given vertex
     public int[] NeighborCount(int v)
     {
         int[] neighbors;
         int size = 0;
-        Node p = adj[v].next;
+        Node p = adj[v];
         //Find out how many neighbors there are
         while (p != z)
         {
-            size++;
+            ++size;
             p = p.next;
         }
 
         neighbors = new int[size];
-        p = adj[v].next; //Reset p
+        p = adj[v]; //Reset p
 
         //Fill out integer list with all the neighbors
         if (p == z)
@@ -499,7 +564,7 @@ public class GraphLists
 
         //g.SPT_Dijkstra(choice); 
         //g.MST_Prim(choice);  
-        //g.DF_Show(choice);
+        //g.DF(choice);
         g.breadthFirst(choice);             
     }
 }
