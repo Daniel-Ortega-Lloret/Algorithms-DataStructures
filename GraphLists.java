@@ -315,6 +315,7 @@ class Graph
 
     public void breadthFirst(int s)
     {
+        System.out.println("Starting At Vertex " + toChar(s) + " Visiting Children");
         // Make The Distance Array, And Parent Array
         int[]  dist, parent;
         int[] Neighbors;
@@ -345,7 +346,7 @@ class Graph
         while (!Q.isEmpty())
         {
             u = Q.deQueue();
-            System.out.println("Dequeued " + u + " From Queue.\n");
+            //System.out.println("Dequeued " + toChar(u) + " From Queue.\n");
 
             Neighbors = NeighborCount(u);
             // For Every Child Of U
@@ -358,14 +359,20 @@ class Graph
                     dist[v] = dist[u] + 1;
                     parent[v] = u;
                     Q.enQueue(v);
+                    System.out.println("BFS just visited vertex " + toChar(v) + " along edge " + toChar(u) + "--" + toChar(v));
                 }
             }
+            //System.out.println("Processing Next Element In Queue...\n");
             // When Done With Parent Make It Black
             visited[u] = 2;
         }
         
-
-        
+        // For Checking The Dist and Parent Array
+        for (int i = 1; i < V + 1; i++)
+        {
+            System.out.print("\nDistance of Node " + toChar(i) + " From source is " + dist[i]);
+            System.out.print("\tParent of Node is " + toChar(parent[i]));
+        }
     }
 
     //Recursive Depth-First Traversal
