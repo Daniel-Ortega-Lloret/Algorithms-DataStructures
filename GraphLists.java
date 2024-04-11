@@ -373,6 +373,28 @@ class Graph
             System.out.print("\nDistance of Node " + toChar(i) + " From source is " + dist[i]);
             System.out.print("\tParent of Node is " + toChar(parent[i]));
         }
+
+        showBF(parent);
+    
+    }
+
+    public void showBF(int [] parent)
+    {
+        Node[] inOrder = ParentInOrder(parent);
+        System.out.println("\n\nThe minimum spanning tree found by Breadth-First Search is:\n");
+
+        int v;
+        Node n;
+        
+        for(v=1; v<=V; ++v)
+        {
+            System.out.print("\nadj[" + toChar(v) + "] ->" );
+            for(n = inOrder[v]; n != z; n = n.next) 
+            {
+                System.out.print(" " + toChar(n.vert) + " -> ");   
+            }
+        }
+        System.out.println("");
     }
 
     //Recursive Depth-First Traversal
@@ -571,7 +593,7 @@ public class GraphLists
 
         //g.SPT_Dijkstra(choice); 
         //g.MST_Prim(choice);  
-        //g.DF(choice);
+        g.DF(choice);
         g.breadthFirst(choice);             
     }
 }
