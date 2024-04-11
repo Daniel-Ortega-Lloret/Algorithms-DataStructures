@@ -315,6 +315,7 @@ class Graph
 
     public void breadthFirst(int s)
     {
+        System.out.println("\nBreadth-First Graph Traversal\n");
         System.out.println("Starting At Vertex " + toChar(s) + " Visiting Children");
         // Make The Distance Array, And Parent Array
         int[]  dist, parent;
@@ -359,28 +360,20 @@ class Graph
                     dist[v] = dist[u] + 1;
                     parent[v] = u;
                     Q.enQueue(v);
-                    System.out.println("BFS just visited vertex " + toChar(v) + " along edge " + toChar(u) + "--" + toChar(v));
+                    System.out.println("\nBFS just visited vertex " + toChar(v) + " along edge " + toChar(u) + "--" + toChar(v));
                 }
             }
-            //System.out.println("Processing Next Element In Queue...\n");
             // When Done With Parent Make It Black
             visited[u] = 2;
         }
-        
-        // For Checking The Dist and Parent Array
-        for (int i = 1; i < V + 1; i++)
-        {
-            System.out.print("\nDistance of Node " + toChar(i) + " From source is " + dist[i]);
-            System.out.print("\tParent of Node is " + toChar(parent[i]));
-        }
 
-        showBF(parent);
+        showBF(parent, dist);
     
     }
 
-    public void showBF(int [] parent)
+    public void showBF(int [] parent, int[] distance)
     {
-        Node[] inOrder = ParentInOrder(parent);
+        Node[] inOrder = ParentInOrder(parent, distance);
         System.out.println("\n\nThe minimum spanning tree found by Breadth-First Search is:\n");
 
         int v;
@@ -391,7 +384,7 @@ class Graph
             System.out.print("\nadj[" + toChar(v) + "] ->" );
             for(n = inOrder[v]; n != z; n = n.next) 
             {
-                System.out.print(" " + toChar(n.vert) + " -> ");   
+                System.out.print(" |" + toChar(n.vert) + " | " + n.wgt + "| ->");   
             }
         }
         System.out.println("");
@@ -404,7 +397,6 @@ class Graph
         colour = new C[V+1];
         parent = new int[V+1];
         d = new int[V+1];
-        f = new int[V+1];
         inOrder = new int[V+1];
         for (v = 1; v <= V; ++v)
         {
@@ -412,10 +404,9 @@ class Graph
             parent[v] = 0;
         }
 
-        System.out.println("\nDepth First Graph Traversal\n");
+        System.out.println("\nDepth-First Graph Traversal\n");
         System.out.println("Starting with Vertex " + toChar(s));
 
-        time = 0;
         for (v = 1; v <= V; ++v)
         {
             if (colour[v] == C.White)
@@ -424,7 +415,7 @@ class Graph
             }
         }
 
-        ShowDF(parent);
+        ShowDF(parent, d);
         
         System.out.print("\n\n");
     }
@@ -432,8 +423,6 @@ class Graph
     private void dfVisit( int u)
     {
         int[] neighbors = NeighborCount(u);
-        ++time;
-        d[u] = time;
         colour[u] = C.Gray;
 
         System.out.println("\n DF just visited vertex " + toChar(u) + " along edge " + toChar(parent[u]) + "--" + toChar(u));
@@ -443,18 +432,17 @@ class Graph
             if (colour[v] == C.White)
             {
                 parent[v] = u;
+                d[v] = d[u] + 1;
                 dfVisit(v);
             }
         }
 
         colour[u] = C.Black;
-        ++time;
-        f[u] = time;
     }
     
-    public void ShowDF(int[] parent)
+    public void ShowDF(int[] parent, int[] distance)
     {
-        Node[] inOrder = ParentInOrder(parent);
+        Node[] inOrder = ParentInOrder(parent, distance);
         System.out.println("\n\nThe minimum spanning tree found by Depth-First Search is:\n");
 
         int v;
@@ -465,14 +453,14 @@ class Graph
             System.out.print("\nadj[" + toChar(v) + "] ->" );
             for(n = inOrder[v]; n != z; n = n.next) 
             {
-                System.out.print(" " + toChar(n.vert) + " -> ");   
+                System.out.print(" |" + toChar(n.vert) + " | " + n.wgt + "| ->");  
             }
         }
         System.out.println("");
     }
 
     //Function to return an adjacency list with the spanning tree
-    public Node[] ParentInOrder(int[] parent)
+    public Node[] ParentInOrder(int[] parent, int[] distance)
     {
         int v;
         int j;
@@ -492,6 +480,7 @@ class Graph
                 {
                     Node p = new Node();
                     p.vert = j;
+                    p.wgt = distance[j];
                     p.next = inOrder[v];
                     inOrder[v] = p;
                 }
