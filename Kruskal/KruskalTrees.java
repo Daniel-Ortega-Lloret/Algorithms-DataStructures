@@ -107,24 +107,48 @@ class Heap
 class UnionFindSets
 {
     private int[] treeParent;
+    private int[] Rank;
     private int N;
     
     public UnionFindSets( int V)
     {
         N = V;
+        Rank = new int[V + 1];  // Used For Union by Rank
         treeParent = new int[V+1];
         // missing linessss
     }
 
+    // Recursively Find The Root Of The Set. We Choose 1 Letter To Be The Root, Then All Of The Other Nodes In Set Will Point To Root.
     public int findSet( int vertex)
     {   
-        // missing lines
-        return 0;
+        // If The Node Doesnt Point To Itself, Then Its Not The Root 
+        if (treeParent[vertex] != vertex)
+        {
+            treeParent[vertex] = findSet(vertex);
+        }
+        return treeParent[vertex];
     }
     
+    // Merge Set1 And Set2 Together. MAKE SURE THE ROOTS OF BOTH SETS ARE PASSED 
     public void union( int set1, int set2)
     {
-        // missing
+        // Which Set Has More Depth
+        if (Rank[set1] < Rank[set2])
+        {
+            treeParent[set1] = set2;
+        }
+
+        else if (Rank[set1] > Rank[set2])
+        {
+            treeParent[set2] = set1;
+        }
+
+        // If They Are Equal
+        else
+        {
+            treeParent[set2] = set1;
+            Rank[set1] = Rank[set1] + 1;
+        }
     }
     
     public void showTrees()
