@@ -118,6 +118,13 @@ class UnionFindSets
         // missing linessss
     }
 
+    
+    public void MakeSet(int vertex)
+    {
+        treeParent[vertex] = vertex;
+        Rank[vertex] = 0;
+    }
+
     // Recursively Find The Root Of The Set. We Choose 1 Letter To Be The Root, Then All Of The Other Nodes In Set Will Point To Root.
     public int findSet( int vertex)
     {   
