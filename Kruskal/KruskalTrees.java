@@ -13,7 +13,9 @@ class Edge {
     }
 
     public Edge( int x, int y, int w) {
-        ;// missing lines
+        u = x;
+        v = y;
+        wgt = w;
     }
     
     public void show() {
@@ -182,10 +184,13 @@ class Graph
             v = Integer.parseInt(parts[1]); 
             w = Integer.parseInt(parts[2]);
             
-            System.out.println("Edge " + toChar(u) + "--(" + w + ")--" + toChar(v));                         
-             
+            //System.out.println("Edge " + toChar(u) + "--(" + w + ")--" + toChar(v));                         
+            
             // create Edge object  
+            edge[e] = new Edge(u, v, w);
         }
+
+        edge[1].show();
     }
 
 
