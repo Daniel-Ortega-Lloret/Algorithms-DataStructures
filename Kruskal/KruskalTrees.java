@@ -64,10 +64,28 @@ class Heap
         int e, j;
 
         e = h[k];
-        while( k <= N/2) {
-            // missing lines
+        j = 2 * k;
+
+        // While left siblings exist
+        while( j <= N)
+        {
+            // If N > J that means there is a right sibling. And if right sibling > left
+            if ((j < N) && (h[j + 1] > h[j]))
+            {
+                j++;
+            }
+
+            if (e >= h[j])
+            {
+                break;
+            }
+
+            // child goes up to fill gaps
+            h[k] = h[j];
+            k = j;
+            k = 2 * k;
+            h[k] = e;
         }
-        h[k] = e;
     }
 
 
