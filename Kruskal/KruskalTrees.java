@@ -255,7 +255,7 @@ class Graph
         int ei;
         Edge e;
         int uSet, vSet;
-        UnionFindSets partition;
+        UnionFindSets partition[V];
         
         // create edge array to store MST
         // Initially it has no edges.
@@ -277,11 +277,14 @@ class Graph
                     UNION(u, v)
         */
 
-        // make set of all vertices
+        // make sets of all vertices
         for (int i = 0; i < V; i++)
         {
-            Set<Integer> vSet = new HashSet<Integer>();
+            partition[i].MakeSet(edge[i].v);
         }
+        // for (int v : edge.v) {
+        //     // pass
+        // }
         
         
         return mst;
@@ -316,7 +319,7 @@ class KruskalTrees {
 
         Graph g = new Graph(fname);
 
-        g.MST_Kruskal();
+        // g.MST_Kruskal();
 
         //g.showMST();
         
