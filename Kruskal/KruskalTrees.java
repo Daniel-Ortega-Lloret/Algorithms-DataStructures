@@ -1,7 +1,8 @@
 // Kruskal's Minimum Spanning Tree Algorithm
 // Union-find implemented using disjoint set trees without compression
 
-import java.io.*;    
+import java.io.*;
+import java.util.HashSet;    
  
 class Edge {
     public int u, v, wgt;
@@ -223,7 +224,7 @@ class Graph
         // create edge array
         edge = new Edge[E+1];   
         
-       // read the edges
+        // read the edges
         System.out.println("Reading edges from text file");
         for(e = 1; e <= E; ++e)
         {
@@ -240,35 +241,51 @@ class Graph
         }
 
         edge[1].show();
+
     }
 
 
-/**********************************************************
-*
-*       Kruskal's minimum spanning tree algorithm
-*
-**********************************************************/
-public Edge[] MST_Kruskal() 
-{
-    int ei, i = 0;
-    Edge e;
-    int uSet, vSet;
-    UnionFindSets partition;
-    
-    // create edge array to store MST
-    // Initially it has no edges.
-    mst = new Edge[V-1];
+    /**********************************************************
+    *
+    *       Kruskal's minimum spanning tree algorithm
+    *
+    **********************************************************/
+    public Edge[] MST_Kruskal() 
+    {
+        int ei;
+        Edge e;
+        int uSet, vSet;
+        UnionFindSets partition;
+        
+        // create edge array to store MST
+        // Initially it has no edges.
+        mst = new Edge[V-1];
 
-    // priority queue for indices of array of edges
-    Heap h = new Heap(E, edge);
+        // priority queue for indices of array of edges
+        Heap h = new Heap(E, edge);
 
-    // create partition of singleton sets for the vertices
-    
-    
-    
-    
-    return mst;
-}
+        // create partition of singleton sets for the vertices
+        
+        /*
+                    ******** Richard Psuedocode ********
+
+            foreach v ∈ G.V:
+                MAKE-SET(v) 
+            foreach (u, v) ordered by weight(u, v), increasing: 
+                if FIND-SET(u) ≠ FIND-SET(v):
+                    T = T ∪ {(u, v)} 7       
+                    UNION(u, v)
+        */
+
+        // make set of all vertices
+        for (int i = 0; i < V; i++)
+        {
+            Set<Integer> vSet = new HashSet<Integer>();
+        }
+        
+        
+        return mst;
+    }
 
 
     // convert vertex into char for pretty printing
@@ -299,7 +316,7 @@ class KruskalTrees {
 
         Graph g = new Graph(fname);
 
-        //g.MST_Kruskal();
+        g.MST_Kruskal();
 
         //g.showMST();
         
