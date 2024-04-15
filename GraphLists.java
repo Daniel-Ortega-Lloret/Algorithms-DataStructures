@@ -9,7 +9,6 @@
  *  Ciaran Coyne
  *  George Crossan
  */
-
 // Uses an Adjacency Linked Lists, suitable for sparse graphs
 
 import java.io.*;
@@ -366,28 +365,6 @@ class Graph
             // When Done With Parent Make It Black
             visited[u] = 2;
         }
-
-        showBF(parent, dist);
-    
-    }
-
-    public void showBF(int [] parent, int[] distance)
-    {
-        Node[] inOrder = ParentInOrder(parent, distance);
-        System.out.println("\n\nThe minimum spanning tree found by Breadth-First Search is:\n");
-
-        int v;
-        Node n;
-        
-        for(v=1; v<=V; ++v)
-        {
-            System.out.print("\nadj[" + toChar(v) + "] ->" );
-            for(n = inOrder[v]; n != z; n = n.next) 
-            {
-                System.out.print(" |" + toChar(n.vert) + " | " + n.wgt + "| ->");   
-            }
-        }
-        System.out.println("");
     }
 
     //Recursive Depth-First Traversal
@@ -414,8 +391,6 @@ class Graph
                 dfVisit(s);
             }
         }
-
-        ShowDF(parent, d);
         
         System.out.print("\n\n");
     }
@@ -438,56 +413,6 @@ class Graph
         }
 
         colour[u] = C.Black;
-    }
-    
-    public void ShowDF(int[] parent, int[] distance)
-    {
-        Node[] inOrder = ParentInOrder(parent, distance);
-        System.out.println("\n\nThe minimum spanning tree found by Depth-First Search is:\n");
-
-        int v;
-        Node n;
-        
-        for(v=1; v<=V; ++v)
-        {
-            System.out.print("\nadj[" + toChar(v) + "] ->" );
-            for(n = inOrder[v]; n != z; n = n.next) 
-            {
-                System.out.print(" |" + toChar(n.vert) + " | " + n.wgt + "| ->");  
-            }
-        }
-        System.out.println("");
-    }
-
-    //Function to return an adjacency list with the spanning tree
-    public Node[] ParentInOrder(int[] parent, int[] distance)
-    {
-        int v;
-        int j;
-        Node[] inOrder = new Node[V+1];
-
-        for (v = 1; v <= V; ++v)
-        {
-            inOrder[v] = z;
-        }
-
-
-        for (v = 1; v <= V; ++v)
-        {
-            for (j = 1; j <= V; ++j)
-            {
-                if (parent[j] == v)
-                {
-                    Node p = new Node();
-                    p.vert = j;
-                    p.wgt = distance[j];
-                    p.next = inOrder[v];
-                    inOrder[v] = p;
-                }
-            }
-        }
-
-        return inOrder;
     }
 
     //Function that returns a list of the numeric representation of all the vertices connected to the given vertex
