@@ -100,6 +100,11 @@ class Heap
         siftDown(1);
         return h[0];
     }
+
+    public Edge removeMin()
+    {
+        //return h[1];
+    }
 }
 
 
@@ -293,16 +298,38 @@ class Graph
         partition = new UnionFindSets[V];
         
 
-        // make sets of all vertices
+        // Make Sets Out Of Each Vertex
         for (int i = 1; i < V; i++)
         {
-            partition[i] = new UnionFindSets(edge[i].v);//MakeSet(edge[i].v);
+            partition[i] = new UnionFindSets(edge[i].v);
         }
-        // for (int v : edge.v) {
-        //     // pass
-        // }
+
         
-        
+    
+        // T Starts As An Empty Tree That Will Hold The MST
+        int v, u, wgt;
+        Edge smallest; 
+        for (int i = 0; i < V - 1; i++)
+        {
+            smallest = new Edge(0, 0, 0);
+            smallest = h.removeMin();
+
+            v = smallest.v;
+            u = smallest.u;
+            wgt = smallest.wgt;
+
+            // Find Root Of Set C And Set V
+            v = partition[i].findSet(v);
+            u = partition[i].findSet(u);
+
+            // If They Arent in The Same Set, Merge Them
+            if (v != u)
+            {
+                partition[i].union(u, v);
+                //mst = new edge(u, v, wgt) // Add The u, v and wgt To T
+            }
+        }
+
         return mst;
     }
 
