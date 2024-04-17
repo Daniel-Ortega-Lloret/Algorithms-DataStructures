@@ -31,6 +31,10 @@ class Edge {
 }
 
 
+
+
+
+
 class Heap
 {
 	private int[] h;
@@ -98,6 +102,14 @@ class Heap
     }
 }
 
+
+
+
+
+
+
+
+
 /****************************************************
 *
 *       UnionFind partition to support union-find operations
@@ -116,7 +128,8 @@ class UnionFindSets
         N = V;
         Rank = new int[V + 1];  // Used For Union by Rank
         treeParent = new int[V+1];
-        // missing linessss
+        
+        MakeSet(V);
     }
 
     
@@ -199,6 +212,12 @@ class UnionFindSets
     }
 }
 
+
+
+
+
+
+
 class Graph 
 { 
     private int V, E;
@@ -245,6 +264,12 @@ class Graph
     }
 
 
+
+
+
+
+
+
     /**********************************************************
     *
     *       Kruskal's minimum spanning tree algorithm
@@ -255,7 +280,7 @@ class Graph
         int ei;
         Edge e;
         int uSet, vSet;
-        UnionFindSets partition[V];
+        UnionFindSets partition[];
         
         // create edge array to store MST
         // Initially it has no edges.
@@ -265,22 +290,13 @@ class Graph
         Heap h = new Heap(E, edge);
 
         // create partition of singleton sets for the vertices
+        partition = new UnionFindSets[V];
         
-        /*
-                    ******** Richard Psuedocode ********
-
-            foreach v ∈ G.V:
-                MAKE-SET(v) 
-            foreach (u, v) ordered by weight(u, v), increasing: 
-                if FIND-SET(u) ≠ FIND-SET(v):
-                    T = T ∪ {(u, v)} 7       
-                    UNION(u, v)
-        */
 
         // make sets of all vertices
-        for (int i = 0; i < V; i++)
+        for (int i = 1; i < V; i++)
         {
-            partition[i].MakeSet(edge[i].v);
+            partition[i] = new UnionFindSets(edge[i].v);//MakeSet(edge[i].v);
         }
         // for (int v : edge.v) {
         //     // pass
@@ -319,9 +335,10 @@ class KruskalTrees {
 
         Graph g = new Graph(fname);
 
-        // g.MST_Kruskal();
+        g.MST_Kruskal();
 
         //g.showMST();
+        
         
     }
 }    
