@@ -57,7 +57,7 @@ class Heap
         // Then convert h[] into a heap
         // from the bottom up.
         for(i = N/2; i > 0; --i)
-            ;// missing line;
+            siftDown(i);
     }
 
 
@@ -88,7 +88,7 @@ class Heap
             // child goes up to fill gaps
             h[k] = h[j];
             k = j;
-            k = 2 * k;
+            j = 2 * k;
             h[k] = e;
         }
     }
@@ -101,10 +101,10 @@ class Heap
         return h[0];
     }
 
-    public Edge removeMin()
-    {
-        //return h[1];
-    }
+    // public int removeMin()
+    // {
+        
+    // }
 }
 
 
@@ -128,13 +128,13 @@ class UnionFindSets
     private int[] Rank;
     private int N;
     
-    public UnionFindSets( int V)
+    public UnionFindSets( int vertex)
     {
-        N = V;
+        int V = Graph.V;
         Rank = new int[V + 1];  // Used For Union by Rank
-        treeParent = new int[V+1];
+        treeParent = new int[V + 1];
         
-        MakeSet(V);
+        MakeSet(vertex);
     }
 
     
@@ -150,7 +150,7 @@ class UnionFindSets
         // If The Node Doesnt Point To Itself, Then Its Not The Root 
         if (treeParent[vertex] != vertex)
         {
-            treeParent[vertex] = findSet(vertex);
+            treeParent[vertex] = findSet(treeParent[vertex]);
         }
         return treeParent[vertex];
     }
@@ -225,7 +225,8 @@ class UnionFindSets
 
 class Graph 
 { 
-    private int V, E;
+    public static int V;
+    public int E;
     private Edge[] edge;
     private Edge[] mst;        
 
@@ -295,11 +296,11 @@ class Graph
         Heap h = new Heap(E, edge);
 
         // create partition of singleton sets for the vertices
-        partition = new UnionFindSets[V];
+        partition = new UnionFindSets[V + 1];
         
 
         // Make Sets Out Of Each Vertex
-        for (int i = 1; i < V; i++)
+        for (int i = 1; i <= V; i++)
         {
             partition[i] = new UnionFindSets(edge[i].v);
         }
@@ -312,20 +313,20 @@ class Graph
         for (int i = 0; i < V - 1; i++)
         {
             smallest = new Edge(0, 0, 0);
-            smallest = h.removeMin();
+            smallest = edge[h.remove()];
 
             v = smallest.v;
             u = smallest.u;
             wgt = smallest.wgt;
 
             // Find Root Of Set C And Set V
-            v = partition[i].findSet(v);
-            u = partition[i].findSet(u);
+            v = partition[1].findSet(v);
+            u = partition[1].findSet(u);
 
             // If They Arent in The Same Set, Merge Them
             if (v != u)
             {
-                partition[i].union(u, v);
+                partition[1].union(u, v);
                 //mst = new edge(u, v, wgt) // Add The u, v and wgt To T
             }
         }
