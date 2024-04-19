@@ -61,6 +61,7 @@ class Heap
     }
 
 
+    // We need heapsort
 
     
 
@@ -302,7 +303,7 @@ class Graph
         // Make Sets Out Of Each Vertex
         for (int i = 1; i <= V; i++)
         {
-            partition[i] = new UnionFindSets(edge[i].v);
+            partition[i] = new UnionFindSets(i);
         }
 
         
@@ -320,14 +321,14 @@ class Graph
             wgt = smallest.wgt;
 
             // Find Root Of Set C And Set V
-            v = partition[1].findSet(v);
-            u = partition[1].findSet(u);
+            v = partition[v].findSet(v);
+            u = partition[u].findSet(u);
 
             // If They Arent in The Same Set, Merge Them
             if (v != u)
             {
                 partition[1].union(u, v);
-                //mst = new edge(u, v, wgt) // Add The u, v and wgt To T
+                mst[i] = smallest; // Add The u, v and wgt To T
             }
         }
 
