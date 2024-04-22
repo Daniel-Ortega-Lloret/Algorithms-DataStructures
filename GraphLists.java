@@ -5,10 +5,11 @@
  * 
  * Authors: 
  *  Daniel Ortega Lloret C22726225
- *  Dylan O'rourke
- *  Ciaran Coyne
- *  George Crossan
+ *  Dylan O'rourke C22341463
+ *  Ciaran Coyne C22416392
+ *  George Crossan C22374763
  */
+
 // Uses an Adjacency Linked Lists, suitable for sparse graphs
 
 import java.io.*;
