@@ -68,7 +68,39 @@ class Heap
         {
             siftDown(i);
         }
+
+        MinHeapify(1);
             
+    }
+
+    private void MinHeapify(int i)
+    {
+        int l, r, smallest, temp;
+        l = 2 * i; 
+        r = l + 1;
+
+        if (l < N && edge[h[l]].wgt > edge[h[i]].wgt)
+        {
+            smallest = l;
+        }
+
+        else
+        {
+            smallest = i;
+        }
+
+        if (r <= N && edge[h[r]].wgt > edge[h[smallest]].wgt)
+        {
+            smallest = r;
+        }
+
+        if (smallest != i)
+        {
+            temp = h[i];
+            h[i] = h[smallest];
+            h[smallest] = temp;
+            MinHeapify(smallest);
+        }
     }
 
 
@@ -111,7 +143,8 @@ class Heap
     {
         h[0] = h[1];
         h[1] = h[N--];
-        siftDown(1);
+        MinHeapify(1);
+        //siftDown(1);
         return h[0];
     }
 
