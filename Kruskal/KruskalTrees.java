@@ -66,10 +66,11 @@ class Heap
         // from the bottom up.
         for(i = N/2; i > 0; --i)
         {
+            //MinHeapify(h[i]);
             siftDown(i);
         }
 
-        MinHeapify(1);
+        
             
     }
 
@@ -79,18 +80,14 @@ class Heap
         Edge tempEdge;
         l = 2 * i; 
         r = l + 1;
+        smallest  = i;
 
-        if (l < N && edge[h[l]].wgt < edge[h[i]].wgt)
+        if (l < N && edge[h[l]].wgt < edge[h[smallest]].wgt)
         {
             smallest = l;
         }
 
-        else
-        {
-            smallest = i;
-        }
-
-        if (r <= N && edge[h[r]].wgt < edge[h[smallest]].wgt)
+        if (r < N && edge[h[r]].wgt < edge[h[smallest]].wgt)
         {
             smallest = r;
         }
@@ -98,24 +95,15 @@ class Heap
         // If the smallest wasnt edge[h[i]]
         if (smallest != i)
         {
-            temp = h[i]; //tempEdge = edge[h[i]];   
-            h[i] = h[smallest]; //edge[h[i]] = edge[h[smallest]];
-            h[smallest] = temp; //edge[h[smallest]] = tempEdge;
-            MinHeapify(smallest);
-        }
-
-        else
-        {
-            h[1] = smallest;
+            temp = h[i];   
+            h[i] = h[smallest]; 
+            h[smallest] = temp; 
+            MinHeapify(h[smallest]);
         }
     }
 
 
-    // We need heapsort
-
-    
-
-
+ 
     private void siftDown( int k) 
     {
         int e, j;
@@ -127,12 +115,12 @@ class Heap
         while( j <= N)
         {
             // If N > J that means there is a right sibling. And if right sibling > left
-            if ((j < N) && (edge[h[j + 1]].wgt > edge[h[j]].wgt))
+            if ((j < N) && (edge[h[j + 1]].wgt < edge[h[j]].wgt))
             {
                 j++;
             }
 
-            if (e >= edge[h[j]].wgt)
+            if (e <= edge[h[j]].wgt)
             {
                 break;
             }
@@ -151,14 +139,9 @@ class Heap
         h[0] = h[1];
         h[1] = h[N--];
         siftDown(1);
-        MinHeapify(1);
+        //MinHeapify(1);
         return h[0];
     }
-
-    // public int removeMin()
-    // {
-        
-    // }
 }
 
 
