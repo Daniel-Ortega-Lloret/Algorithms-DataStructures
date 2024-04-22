@@ -76,10 +76,11 @@ class Heap
     private void MinHeapify(int i)
     {
         int l, r, smallest, temp;
+        Edge tempEdge;
         l = 2 * i; 
         r = l + 1;
 
-        if (l < N && edge[h[l]].wgt > edge[h[i]].wgt)
+        if (l < N && edge[h[l]].wgt < edge[h[i]].wgt)
         {
             smallest = l;
         }
@@ -89,17 +90,23 @@ class Heap
             smallest = i;
         }
 
-        if (r <= N && edge[h[r]].wgt > edge[h[smallest]].wgt)
+        if (r <= N && edge[h[r]].wgt < edge[h[smallest]].wgt)
         {
             smallest = r;
         }
 
+        // If the smallest wasnt edge[h[i]]
         if (smallest != i)
         {
-            temp = h[i];
-            h[i] = h[smallest];
-            h[smallest] = temp;
+            temp = h[i]; //tempEdge = edge[h[i]];   
+            h[i] = h[smallest]; //edge[h[i]] = edge[h[smallest]];
+            h[smallest] = temp; //edge[h[smallest]] = tempEdge;
             MinHeapify(smallest);
+        }
+
+        else
+        {
+            h[1] = smallest;
         }
     }
 
@@ -113,19 +120,19 @@ class Heap
     {
         int e, j;
 
-        e = h[k];
+        e = edge[h[k]].wgt;   
         j = 2 * k;
 
         // While left siblings exist
         while( j <= N)
         {
             // If N > J that means there is a right sibling. And if right sibling > left
-            if ((j < N) && (h[j + 1] > h[j]))
+            if ((j < N) && (edge[h[j + 1]].wgt > edge[h[j]].wgt))
             {
                 j++;
             }
 
-            if (e >= h[j])
+            if (e >= edge[h[j]].wgt)
             {
                 break;
             }
@@ -143,8 +150,8 @@ class Heap
     {
         h[0] = h[1];
         h[1] = h[N--];
+        siftDown(1);
         MinHeapify(1);
-        //siftDown(1);
         return h[0];
     }
 
@@ -175,13 +182,11 @@ class UnionFindSets
     private int[] Rank;
     private int N;
     
-    public UnionFindSets( int vertex)
+    public UnionFindSets()
     {
         int V = Graph.V;
         Rank = new int[V + 1];  // Used For Union by Rank
         treeParent = new int[V + 1];
-        
-        MakeSet(vertex);
     }
 
     
@@ -333,23 +338,23 @@ class Graph
         int ei;
         Edge e;
         int uSet, vSet;
-        UnionFindSets partition[];
+        UnionFindSets partition;
         
         // create edge array to store MST
         // Initially it has no edges.
-        mst = new Edge[V-1];
+        mst = new Edge[E-1];
 
         // priority queue for indices of array of edges
         Heap h = new Heap(E, edge);
 
         // create partition of singleton sets for the vertices
-        partition = new UnionFindSets[V + 1];
+        partition = new UnionFindSets();
         
 
         // Make Sets Out Of Each Vertex
         for (int i = 1; i <= V; i++)
         {
-            partition[i] = new UnionFindSets(i);
+            partition.MakeSet(i);
         }
 
         
@@ -357,7 +362,7 @@ class Graph
         // T Starts As An Empty Tree That Will Hold The MST
         int v, u, wgt;
         Edge smallest; 
-        for (int i = 0; i < V - 1; i++)
+        for (int i = 0; i < E - 1; i++)
         {
             smallest = new Edge(0, 0, 0);
             smallest = edge[h.remove()];
@@ -367,13 +372,13 @@ class Graph
             wgt = smallest.wgt;
 
             // Find Root Of Set C And Set V
-            v = partition[v].findSet(v);
-            u = partition[u].findSet(u);
+            v = partition.findSet(v);
+            u = partition.findSet(u);
 
             // If They Arent in The Same Set, Merge Them
             if (v != u)
             {
-                partition[1].union(u, v);
+                partition.union(u, v);
                 mst[i] = smallest; // Add The u, v and wgt To T
             }
         }
