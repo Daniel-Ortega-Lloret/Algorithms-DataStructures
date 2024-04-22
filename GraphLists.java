@@ -45,14 +45,12 @@ class Heap
     public void siftUp( int k) 
     {
         int v = a[k];
+        hPos[a[k]] = k;
 
-        // code yourself
-        // must use hPos[] and dist[] arrays
-        a[0] = 0;
-        dist[0] = 0;
+        a[0] = 0;    // consider 0 as a kind of dummy heap value
+        dist[0] = 0; // pay close attention to this, smaller dist means higher priority
 
-        while (dist[v] < dist[a[k / 2]])
-        {
+        while( dist[v] < dist[a[k/2]] ) {
             a[k] = a[k/2];
             hPos[a[k]] = k;
             k = k/2;
@@ -65,31 +63,19 @@ class Heap
     public void siftDown( int k) 
     {
         int v, j;
-       
         v = a[k];  
-        
-        // code yourself 
-        // must use hPos[] and dist[] arrays
-        while (k <= N/2 && dist[v] < dist[a[v]])
-        {
+
+        while( k <= N/2) {
             j = 2 * k;
-            if (j < N && a[j] < a[j + 1])
-            {
-                ++j;
-            }
-            if (v >= a[j])
-            {
-                break;
-            }
+            if(j < N && dist[a[j]] > dist[a[j+1]]) ++j;
+            if( dist[v] <= dist[a[j]]) break;
 
-            a[k] = a[j];
-            hPos[a[k]] = j;
-
+            a[k] = a[j];	  
+            hPos[a[k]] = k;
             k = j;
         }
-
         a[k] = v;
-        hPos[v] = k;
+        hPos[a[k]] = k; 
     }
 
 
@@ -272,27 +258,60 @@ class Graph
     //Prim's Algorithm
 	public void MST_Prim(int s)
 	{
-        int v, u;
+        System.out.println("\n\nPrim's MST:");
+
+        int v, d;
         int wgt, wgt_sum = 0;
         int[]  dist, parent, hPos;
-        Node t;
+        dist = new int[V+1];
+        parent = new int[V+1];
+        hPos = new int[V+1];
+        
+        Node u;
+
 
         //code here
-        dist = new int[V];
-        parent = new int[V];
-        hPos = new int[V];
+        
+        for (int i= 0; i< V+1; ++i) {
+            dist[i] = Integer.MAX_VALUE;
+            hPos[i] = 0;
+            parent[i] = 0;
 
-        dist[s] = 0;
+        }
         
         Heap h =  new Heap(V, dist, hPos);
         h.insert(s);
         
-        while (true)  
+        while (!h.isEmpty())  
         {
-            //most of alg here
-            
-        }
-        //System.out.print("\n\nWeight of MST = " + wgt_sum + "\n");
+            // most of alg here
+            v = h.remove();
+            dist[v] = -dist[v];
+            for(u = adj[v]; u != z; u = u.next){
+                wgt = u.wgt;
+                if(wgt < dist[u.vert]){
+                    d = dist[u.vert];
+
+                    dist[u.vert] = wgt;
+                    parent[u.vert] = v;
+                    if(hPos[u.vert] == 0){
+                        h.insert(u.vert);
+                        wgt_sum += wgt;
+
+                    }
+                    else{
+                        wgt_sum -= d;
+                        h.siftUp(hPos[u.vert]);
+                        wgt_sum += wgt;
+                    }
+                }
+            }
+       }
+
+        System.out.print("Weight of MST = " + wgt_sum + "\n");
+        System.out.println("Vertex\tParent");  
+        for (int i = 1; i <= V; i++)  
+        System.out.println(toChar(i) + "\t" + toChar(parent[i])); 
 	}
     
     public void showMST()
@@ -309,7 +328,51 @@ class Graph
     //Dijkstra's Algorithm
     public void SPT_Dijkstra(int s)
     {
+        System.out.println("\n\nDijkstra's SPT:");
+
+        int v;
+        int wgt, wgt_sum = 0;
+        int[]  dist, parent, hPos;
+        dist = new int[V+1];
+        parent = new int[V+1];
+        hPos = new int[V+1];
         
+        Heap pq;
+        Node u;
+
+        for (int i= 0; i< V+1; ++i) {
+            dist[i] = Integer.MAX_VALUE;
+            hPos[i] = 0;
+            parent[i] = 0;
+
+        }
+        pq = new Heap(V,dist,hPos);
+        v = s;
+        dist[s] = 0;
+
+        pq.insert(s);
+
+        while(!pq.isEmpty()){
+            for(u = adj[v]; u != z; u = u.next){
+                wgt = u.wgt;
+                if(dist[v] + wgt < dist[u.vert]){
+                    dist[u.vert] = dist[v] + wgt;
+                    if(hPos[u.vert] == 0){
+                        pq.insert(u.vert);
+                    }
+                    else{
+                        pq.siftUp(hPos[u.vert]);
+                    }
+                    parent[u.vert] = v;
+                }
+            } 
+            v = pq.remove();
+
+        }
+        System.out.println("Shortest Path Tree as it is built is: \n");  
+        System.out.println("Vertex\tParent\tDistance from root");  
+        for (int i = 1; i <= V; i++)  
+        System.out.println(toChar(i) + "\t" + toChar(parent[i]) + "\t" + dist[i]); 
     }
 
     public void breadthFirst(int s)
@@ -505,8 +568,8 @@ public class GraphLists
 
         g.display();
 
-        //g.SPT_Dijkstra(choice); 
-        //g.MST_Prim(choice);  
+        g.SPT_Dijkstra(choice); 
+        g.MST_Prim(choice);  
         g.DF(choice);
         g.breadthFirst(choice);             
     }
