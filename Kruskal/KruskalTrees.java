@@ -325,7 +325,7 @@ class Graph
         
         // create edge array to store MST
         // Initially it has no edges.
-        mst = new Edge[E-1];
+        mst = new Edge[V-1];
 
         // priority queue for indices of array of edges
         Heap h = new Heap(E, edge);
@@ -345,6 +345,7 @@ class Graph
         // T Starts As An Empty Tree That Will Hold The MST
         int v, u, wgt;
         Edge smallest; 
+        int count = 0;  // To keep track of position in mst[]
         for (int i = 0; i < E - 1; i++)
         {
             smallest = new Edge(0, 0, 0);
@@ -362,7 +363,8 @@ class Graph
             if (v != u)
             {
                 partition.union(u, v);
-                mst[i] = smallest; // Add The u, v and wgt To T
+                mst[count] = smallest; // Add The u, v and wgt To T
+                count++;
             }
         }
 
@@ -400,7 +402,7 @@ class KruskalTrees {
 
         g.MST_Kruskal();
 
-        //g.showMST();
+        g.showMST();
         
         
     }
