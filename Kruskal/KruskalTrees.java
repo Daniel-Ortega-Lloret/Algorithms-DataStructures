@@ -4,22 +4,26 @@
 import java.io.*;
 import java.util.HashSet;    
  
-class Edge {
+class Edge 
+{
     public int u, v, wgt;
 
-    public Edge() {
+    public Edge() 
+    {
         u = 0;
         v = 0;
         wgt = 0;
     }
 
-    public Edge( int x, int y, int w) {
+    public Edge( int x, int y, int w) 
+    {
         u = x;
         v = y;
         wgt = w;
     }
     
-    public void show() {
+    public void show() 
+    {
         System.out.print("Edge " + toChar(u) + "--" + wgt + "--" + toChar(v) + "\n") ;
     }
     
@@ -43,7 +47,8 @@ class Heap
 
 
     // Bottom up heap construc
-    public Heap(int _N, Edge[] _edge) {
+    public Heap(int _N, Edge[] _edge) 
+    {
         int i;
         Nmax = N = _N;
         h = new int[N+1];
@@ -52,12 +57,18 @@ class Heap
         // initially just fill heap array with 
         // indices of edge[] array.
         for (i=0; i <= N; ++i) 
+        {
             h[i] = i;
+        }
+            
            
         // Then convert h[] into a heap
         // from the bottom up.
         for(i = N/2; i > 0; --i)
+        {
             siftDown(i);
+        }
+            
     }
 
 
@@ -66,7 +77,8 @@ class Heap
     
 
 
-    private void siftDown( int k) {
+    private void siftDown( int k) 
+    {
         int e, j;
 
         e = h[k];
@@ -95,7 +107,8 @@ class Heap
     }
 
 
-    public int remove() {
+    public int remove() 
+    {
         h[0] = h[1];
         h[1] = h[N--];
         siftDown(1);
