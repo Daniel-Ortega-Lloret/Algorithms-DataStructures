@@ -363,7 +363,7 @@ class Graph
             if (v != u)
             {
                 partition.union(u, v);
-                mst[count] = smallest; // Add The u, v and wgt To T
+                mst[count] = smallest;
                 count++;
             }
         }
