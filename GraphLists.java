@@ -288,6 +288,7 @@ class Graph
             // most of alg here
             v = h.remove();
             dist[v] = -dist[v];
+            System.out.println("\nNow on node " + toChar(v));
             for(u = adj[v]; u != z; u = u.next){
                 wgt = u.wgt;
                 if(wgt < dist[u.vert]){
@@ -298,12 +299,15 @@ class Graph
                     if(hPos[u.vert] == 0){
                         h.insert(u.vert);
                         wgt_sum += wgt;
-
+                        System.out.println("\nvisiting " + toChar(u.vert) + ", with weight of " + wgt );
+                        System.out.println("weight of tree is now " + wgt_sum);
                     }
                     else{
                         wgt_sum -= d;
                         h.siftUp(hPos[u.vert]);
                         wgt_sum += wgt;
+                        System.out.println("\nvisiting " + toChar(u.vert) + " again, found shorter weight of " + wgt );
+                        System.out.println("weight of tree is now " + wgt_sum);
                     }
                 }
             }
