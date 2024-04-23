@@ -46,7 +46,7 @@ class Heap
     Edge[] edge;
 
 
-    // Bottom up heap construc
+    // Bottom up heap constructor
     public Heap(int _N, Edge[] _edge) 
     {
         int i;
@@ -66,44 +66,12 @@ class Heap
         // from the bottom up.
         for(i = N/2; i > 0; --i)
         {
-            //MinHeapify(h[i]);
             siftDown(i);
         }
-
-        
-            
+           
     }
 
-    private void MinHeapify(int i)
-    {
-        int l, r, smallest, temp;
-        Edge tempEdge;
-        l = 2 * i; 
-        r = l + 1;
-        smallest  = i;
-
-        if (l < N && edge[h[l]].wgt < edge[h[smallest]].wgt)
-        {
-            smallest = l;
-        }
-
-        if (r < N && edge[h[r]].wgt < edge[h[smallest]].wgt)
-        {
-            smallest = r;
-        }
-
-        // If the smallest wasnt edge[h[i]]
-        if (smallest != i)
-        {
-            temp = h[i];   
-            h[i] = h[smallest]; 
-            h[smallest] = temp; 
-            MinHeapify(h[smallest]);
-        }
-    }
-
-
- 
+    
     private void siftDown( int k) 
     {
         int e, j;
@@ -355,7 +323,7 @@ class Graph
             u = smallest.u;
             wgt = smallest.wgt;
 
-            // Find Root Of Set C And Set V
+            // Find Root Of Set v And Set u
             v = partition.findSet(v);
             u = partition.findSet(u);
 
@@ -390,7 +358,7 @@ class Graph
 
 } // end of Graph class
     
-    // test code
+
 class KruskalTrees {
     public static void main(String[] args) throws IOException
     {
@@ -403,8 +371,7 @@ class KruskalTrees {
         g.MST_Kruskal();
 
         g.showMST();
-        
-        
+          
     }
 }    
 
