@@ -434,11 +434,13 @@ class Graph
     //Recursive Depth-First Traversal
     public void DF(int s)
     {
-        int v;
-        colour = new C[V+1];
-        parent = new int[V+1];
-        d = new int[V+1];
-        inOrder = new int[V+1];
+        int v; // var for loops
+
+        colour = new C[V+1]; // stores colour status of each vertex
+        parent = new int[V+1]; // stores parent node of each vertex
+        d = new int[V+1]; // distance array
+
+        // Initializes colour and parent arrays with empty/unvisited values before algorithm starts
         for (v = 1; v <= V; ++v)
         {
             colour[v] = C.White;
@@ -448,6 +450,7 @@ class Graph
         System.out.println("\nDepth-First Graph Traversal\n");
         System.out.println("Starting with Vertex " + toChar(s));
 
+        // Visits every node marked as unvisited(White)
         for (v = 1; v <= V; ++v)
         {
             if (colour[v] == C.White)
@@ -459,15 +462,21 @@ class Graph
         System.out.print("\n\n");
     }
 
+    // Recursive Depth-First Search Algorithm
     private void dfVisit( int u)
     {
+        // integer list representation of all the vertices neighboring the current vertex
         int[] neighbors = NeighborCount(u);
+
+        // Marks current vertex as visited
         colour[u] = C.Gray;
 
         System.out.println("\n DF just visited vertex " + toChar(u) + " along edge " + toChar(parent[u]) + "--" + toChar(u));
 
+        //Foreach loop that iterates for however many neighbors the current vertex has
         for ( int v : neighbors)
         {
+            // If neighboring vertex is unvisited, mark its parent as the current vertex, record its distance, and visit it.
             if (colour[v] == C.White)
             {
                 parent[v] = u;
@@ -476,6 +485,7 @@ class Graph
             }
         }
 
+        //Mark current vertex as processed
         colour[u] = C.Black;
     }
 
