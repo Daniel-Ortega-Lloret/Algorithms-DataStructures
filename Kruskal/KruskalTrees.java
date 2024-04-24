@@ -218,6 +218,25 @@ class UnionFindSets
     {  
         return (char)(u + 64);
     }
+
+    public void printParent()
+    {
+        System.out.print("\nVertex:\t");
+
+        for(int i = 1; i < Graph.V + 1; i++)
+        {
+            System.out.print("\t" + toChar(i));
+        }
+
+        System.out.print("\nParent: ");
+
+        for (int i = 1; i < Graph.V + 1; i++)
+        {
+            System.out.print("\t" + toChar(treeParent[i]));
+        }
+
+        System.out.print("\n\n");
+    }
 }
 
 
@@ -262,22 +281,12 @@ class Graph
             v = Integer.parseInt(parts[1]); 
             w = Integer.parseInt(parts[2]);
             
-            //System.out.println("Edge " + toChar(u) + "--(" + w + ")--" + toChar(v));                         
+            System.out.println("Edge " + toChar(u) + "--(" + w + ")--" + toChar(v));                         
             
             // create Edge object  
             edge[e] = new Edge(u, v, w);
         }
-
-        edge[1].show();
-
     }
-
-
-
-
-
-
-
 
     /**********************************************************
     *
@@ -334,8 +343,9 @@ class Graph
                 mst[count] = smallest;
                 count++;
             }
-        }
 
+            partition.printParent();
+        }
         return mst;
     }
 
@@ -353,7 +363,6 @@ class Graph
             mst[e].show(); 
         }
         System.out.println();
-       
     }
 
 } // end of Graph class
