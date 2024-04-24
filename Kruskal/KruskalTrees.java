@@ -362,11 +362,34 @@ class Graph
 class KruskalTrees {
     public static void main(String[] args) throws IOException
     {
-        String fname = "wGraph3.txt";
-        //System.out.print("\nInput name of file with graph definition: ");
-        //fname = Console.ReadLine();
+        boolean validTxt = false;
 
-        Graph g = new Graph(fname);
+        String graphTxt = "";
+
+        //User error handling
+        while (!validTxt)
+        {
+            try
+            {
+                System.out.println("Please enter the name of a text file with a weighted graph:\n");
+                graphTxt = System.console().readLine();
+
+                //Check if the inputted file exists
+                File file = new File(graphTxt);
+
+                if (!file.exists())
+                {
+                    throw new FileNotFoundException();
+                }
+                
+                validTxt = true;
+            } catch (FileNotFoundException e)
+            {
+                System.out.println("Error, please make sure you spelled text file name correctly.\n");
+            }
+        }
+
+        Graph g = new Graph(graphTxt);
 
         g.MST_Kruskal();
 
