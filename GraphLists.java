@@ -98,25 +98,27 @@ class Heap
         
         return v;
     }
-
 }
 
-class Queue {
-
-    private class Node {
+class Queue 
+{
+    private class Node 
+    {
         int data;
         Node next;
     }
 
     Node z, head, tail;
 
-    public Queue() {
+    public Queue() 
+    {
         z = new Node(); z.next = z;
         head = z;  tail = null;
     }
    
 
-    public void enQueue(int x) {
+    public void enQueue(int x) 
+    {
         Node t;
 
         t = new Node();
@@ -132,7 +134,8 @@ class Queue {
     }
 
   // assume the queue is non-empty when this method is called
-    public int deQueue() {
+    public int deQueue() 
+    {
         int value;
         value = head.data;
         
@@ -142,7 +145,8 @@ class Queue {
     }
     
 
-    public boolean isEmpty() {
+    public boolean isEmpty() 
+    {
         return head == head.next;
     }
 }
@@ -376,58 +380,65 @@ class Graph
         System.out.println(toChar(i) + "\t" + toChar(parent[i]) + "\t" + dist[i]); 
     }
 
+    // Breadth-First Traversal using a queue
     public void breadthFirst(int s)
     {
-        System.out.println("\nBreadth-First Graph Traversal\n");
-        System.out.println("Starting At Vertex " + toChar(s) + " Visiting Children");
         // Make The Distance Array, And Parent Array
         int[]  dist, parent;
         int[] Neighbors;
         dist = new int[V+1];
         parent = new int[V + 1];
-        Neighbors = new int[V];
+        Neighbors = new int[V]; // array to store all adjacent nodes of current node
+        colour = new C[V+1]; // stores colour status of each vertex
 
         // Used For Storing Dequeued Value
         int u;
 
-
         // Set All Vertices To White
-        for (int i = 0; i < V; i++)
+        for (int i = 0; i <= V; i++)
         {
-            visited[i] = 0;
+            colour[i] = C.White;
             dist[i] = Integer.MAX_VALUE;
             parent[i] = 0;
         }
 
+        System.out.println("\nBreadth-First Graph Traversal\n");
+        System.out.println("Starting At Vertex " + toChar(s) + " Visiting Children");
+
         // Make First Vertex Grey
-        visited[s] = 1;
-        dist[s] = 0;
+        colour[s] = C.Gray;
+
+        // Set parent & distance of first vertex to 0
+        dist[s] = 0; 
         parent[s] = 0;
 
         Queue Q = new Queue();
         
-        Q.enQueue(s);
+        Q.enQueue(s); // place first vertex first into the queue
+
         while (!Q.isEmpty())
         {
-            u = Q.deQueue();
-            //System.out.println("Dequeued " + toChar(u) + " From Queue.\n");
+            u = Q.deQueue(); // removes queue vertex and stores it temporarily
 
-            Neighbors = NeighborCount(u);
+            Neighbors = NeighborCount(u); // list of adjacent nodes of current node
+
             // For Every Child Of U
             for (int v : Neighbors)
             {
                 // If Child Is White
-                if (visited[v] == 0)
+                if (colour[v] == C.White)
                 {
-                    visited[v] = 1;
-                    dist[v] = dist[u] + 1;
+                    colour[v] = C.Gray; // mark child as visited
+                    dist[v] = dist[u] + 1; // record distance
                     parent[v] = u;
-                    Q.enQueue(v);
+                    Q.enQueue(v); //visit child
+
                     System.out.println("\nBFS just visited vertex " + toChar(v) + " along edge " + toChar(u) + "--" + toChar(v));
                 }
             }
+
             // When Done With Parent Make It Black
-            visited[u] = 2;
+            colour[u] = C.Black;
         }
     }
 
