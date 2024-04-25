@@ -4,16 +4,19 @@
 import java.io.*;
 import java.util.HashSet;    
  
+// Stores Information Of Each Edge
 class Edge 
 {
     public int u, v, wgt;
 
+    // Default Edge Values If None Passed
     public Edge() 
     {
         u = 0;
         v = 0;
         wgt = 0;
     }
+
 
     public Edge( int x, int y, int w) 
     {
@@ -22,6 +25,7 @@ class Edge
         wgt = w;
     }
     
+    // Show The Vertex u, v And Weight Of An Edge
     public void show() 
     {
         System.out.print("Edge " + toChar(u) + "--" + wgt + "--" + toChar(v) + "\n") ;
@@ -35,15 +39,12 @@ class Edge
 }
 
 
-
-
-
-
+// We Will Store The Edges In A Minimum Heap
 class Heap
 {
 	private int[] h;
     int N, Nmax;
-    Edge[] edge;
+    Edge[] edge;    // Contains All The Edges From Graph
 
 
     // Bottom up heap constructor
@@ -54,16 +55,14 @@ class Heap
         h = new int[N+1];
         edge = _edge;
        
-        // initially just fill heap array with 
-        // indices of edge[] array.
+        // initially just fill heap array with indices of edge[] array.
         for (i=0; i <= N; ++i) 
         {
             h[i] = i;
         }
             
            
-        // Then convert h[] into a heap
-        // from the bottom up.
+        // Then convert h[] into a heap from the bottom up.
         for(i = N/2; i > 0; --i)
         {
             siftDown(i);
@@ -71,7 +70,7 @@ class Heap
            
     }
 
-    
+    // Siftdown Sorts Based On The Weight Of An Edge
     private void siftDown( int k) 
     {
         int e, j;
@@ -102,45 +101,34 @@ class Heap
     }
 
 
+    // Remove From The Top Of The Heap And Sift The Next Value Down
     public int remove() 
     {
         h[0] = h[1];
         h[1] = h[N--];
         siftDown(1);
-        //MinHeapify(1);
         return h[0];
     }
 }
 
 
-
-
-
-
-
-
-
-/****************************************************
-*
-*       UnionFind partition to support union-find operations
-*       Implemented simply using Discrete Set Trees
-*
-*****************************************************/
-
+//UnionFind partition to support union-find operations
 class UnionFindSets
 {
-    private int[] treeParent;
-    private int[] Rank;
+    private int[] treeParent;   // For Storing The Vertex's Parents
+    private int[] Rank; // For Union By Rank Improvement
     private int N;
     
+    // Initalise The Arrays And Set A Local Vertex Amount
     public UnionFindSets()
     {
         int V = Graph.V;
+        int N = V;
         Rank = new int[V + 1];  // Used For Union by Rank
         treeParent = new int[V + 1];
     }
 
-    
+    // When We Make A Set, The Vertex's Parent Will Be Itself
     public void MakeSet(int vertex)
     {
         treeParent[vertex] = vertex;
@@ -158,7 +146,7 @@ class UnionFindSets
         return treeParent[vertex];
     }
     
-    // Merge Set1 And Set2 Together. MAKE SURE THE ROOTS OF BOTH SETS ARE PASSED 
+    // Merge Set1 And Set2 Together
     public void union( int set1, int set2)
     {
         // Which Set Has More Depth
@@ -180,19 +168,21 @@ class UnionFindSets
         }
     }
     
+    // Prints The treeParent Array
     public void showTrees()
     {
         int i;
-        for(i=1; i<=N; ++i)
+        for(i=1; i<=Graph.V; ++i)
             System.out.print(toChar(i) + "->" + toChar(treeParent[i]) + "  " );
         System.out.print("\n");
     }
     
+
     public void showSets()
     {
         int u, root;
         int[] shown = new int[N+1];
-        for (u=1; u<=N; ++u)
+        for (u=1; u<=Graph.V; ++u)
         {   
             root = findSet(u);
             if(shown[root] != 1) {
@@ -320,7 +310,7 @@ class Graph
         
     
         // T Starts As An Empty Tree That Will Hold The MST
-        int v, u, wgt;
+        int v, u;
         Edge smallest; 
         int count = 0;  // To keep track of position in mst[]
         for (int i = 0; i < E - 1; i++)
@@ -330,7 +320,7 @@ class Graph
 
             v = smallest.v;
             u = smallest.u;
-            wgt = smallest.wgt;
+            
 
             // Find Root Of Set v And Set u
             v = partition.findSet(v);
@@ -344,6 +334,7 @@ class Graph
                 count++;
             }
 
+            partition.showTrees();
             partition.printParent();
         }
         return mst;
