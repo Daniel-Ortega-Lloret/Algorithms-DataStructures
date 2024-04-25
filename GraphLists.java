@@ -99,6 +99,33 @@ class Heap
         return v;
     }
 
+    private char toChar(int u)
+    {  
+        return (char)(u + 64);
+    }
+
+    void display() {
+        System.out.println("\nThe tree structure of the heaps is:");
+        System.out.println( toChar(a[1]) + "(" + dist[a[1]] + ")" );
+        for(int i = 1; i<= N/2; i = i * 2) {
+            for(int j = 2*i; j < 4*i && j <= N; ++j)
+                System.out.print( toChar(a[j]) + "(" + dist[a[j]] + ")  ");
+            System.out.println();
+        }
+    }
+
+    public void showDist(int size){
+        System.out.println("Dist:");  
+        for (int i = 0; i < size ; i++)
+        System.out.print(dist[i] + " "); 
+    }
+
+    public void showHPos(int size){
+        System.out.println("hPos:");  
+        for (int i = 0; i < size ; i++)
+        System.out.print(hPos[i] + " "); 
+    }
+
 }
 
 class Queue {
@@ -267,53 +294,53 @@ class Graph
         dist = new int[V+1];
         parent = new int[V+1];
         hPos = new int[V+1];
-        
         Node u;
-
-
-        //code here
         
         for (int i= 0; i< V+1; ++i) {
             dist[i] = Integer.MAX_VALUE;
-            hPos[i] = 0;
+            hPos[i] = 0;      // 0 indicates vertex is not in the heap
             parent[i] = 0;
-
         }
         
-        Heap h =  new Heap(V, dist, hPos);
-        h.insert(s);
+        Heap h =  new Heap(V, dist, hPos);   // Heap is initially empty
+        h.insert(s);    // s is the root of the MST
         
-        while (!h.isEmpty())  
+        while (!h.isEmpty())    // repeats until heap is empty (V-1 times)
         {
-            // most of alg here
-            v = h.remove();
-            dist[v] = -dist[v];
-            System.out.println("\nNow on node " + toChar(v));
-            for(u = adj[v]; u != z; u = u.next){
+            v = h.remove();     // v is added to the MST
+            dist[v] = -dist[v];     // Marking v as added to the MST
+            System.out.print("\n\nNow on node " + toChar(v));
+
+            // look at every vertex adjacent to v
+            for(u = adj[v]; u != z; u = u.next){ 
                 wgt = u.wgt;
                 if(wgt < dist[u.vert]){
-                    d = dist[u.vert];
-
+                    d = dist[u.vert];    // remember the old weight so we can remove it from the sum
                     dist[u.vert] = wgt;
                     parent[u.vert] = v;
+
                     if(hPos[u.vert] == 0){
-                        h.insert(u.vert);
+                        h.insert(u.vert);   // insert vertex if not in heap
                         wgt_sum += wgt;
                         System.out.println("\nvisiting " + toChar(u.vert) + ", with weight of " + wgt );
                         System.out.println("weight of tree is now " + wgt_sum);
                     }
                     else{
-                        wgt_sum -= d;
-                        h.siftUp(hPos[u.vert]);
+                        wgt_sum -= d; // remove old weight value from sum
+                        h.siftUp(hPos[u.vert]);  //   if vertex is already in heap, sift up
                         wgt_sum += wgt;
                         System.out.println("\nvisiting " + toChar(u.vert) + " again, found shorter weight of " + wgt );
                         System.out.println("weight of tree is now " + wgt_sum);
                     }
                 }
             }
+            // print statements to show heap, dist, and hpos after each iteration
+            // h.display();
+            // h.showDist(V+1);
+            // System.out.println();
+            // h.showHPos(V+1);
        }
-
-        System.out.print("Weight of MST = " + wgt_sum + "\n");
+        System.out.print("\nWeight of MST = " + wgt_sum + "\n");
         System.out.println("Vertex\tParent");  
         for (int i = 1; i <= V; i++)  
         System.out.println(toChar(i) + "\t" + toChar(parent[i])); 
@@ -347,33 +374,44 @@ class Graph
 
         for (int i= 0; i< V+1; ++i) {
             dist[i] = Integer.MAX_VALUE;
-            hPos[i] = 0;
+            hPos[i] = 0;      // 0 indicates vertex is not in the heap
             parent[i] = 0;
 
         }
-        pq = new Heap(V,dist,hPos);
-        v = s;
+        pq = new Heap(V,dist,hPos);   // Priority queue is initially empty
+        v = s;  // s is the root of the SPT
         dist[s] = 0;
 
         pq.insert(s);
 
-        while(!pq.isEmpty()){
+        while(!pq.isEmpty()){    // repeats until heap is empty (V-1 times)
+            System.out.print("\n\nNow on node " + toChar(v));
+            // look at every vertex adjacent to v
             for(u = adj[v]; u != z; u = u.next){
                 wgt = u.wgt;
                 if(dist[v] + wgt < dist[u.vert]){
                     dist[u.vert] = dist[v] + wgt;
+                    System.out.print("\nVisiting Node " + toChar(u.vert));
+                    System.out.print("\nThe distance to " + toChar(u.vert) + " is now " + dist[u.vert]);
+                    System.out.println();
                     if(hPos[u.vert] == 0){
-                        pq.insert(u.vert);
+                        pq.insert(u.vert);   // insert vertex if not in heap
                     }
                     else{
-                        pq.siftUp(hPos[u.vert]);
+                        pq.siftUp(hPos[u.vert]);   // otherwise, sift up
                     }
-                    parent[u.vert] = v;
+                    parent[u.vert] = v;     // record its new parent vertex
                 }
             } 
-            v = pq.remove();
+            // print statements to show heap, dist, and hpos after each iteration
+            // pq.display();
+            // pq.showDist(V+1);
+            // System.out.println();
+            // pq.showHPos(V+1);
 
+            v = pq.remove();            
         }
+        System.out.println();
         System.out.println("Shortest Path Tree as it is built is: \n");  
         System.out.println("Vertex\tParent\tDistance from root");  
         for (int i = 1; i <= V; i++)  
