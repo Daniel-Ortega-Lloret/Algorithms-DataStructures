@@ -75,7 +75,7 @@ class Heap
     {
         int e, j;
 
-        e = edge[h[k]].wgt;   
+        e = h[k];   
         j = 2 * k;
 
         // While left siblings exist
@@ -87,7 +87,7 @@ class Heap
                 j++;
             }
 
-            if (e <= edge[h[j]].wgt)
+            if (edge[e].wgt <= edge[h[j]].wgt)
             {
                 break;
             }
@@ -332,10 +332,15 @@ class Graph
                 partition.union(u, v);
                 mst[count] = smallest;
                 count++;
+                System.out.println("\nEdge " + toChar(smallest.u) + " -> " + toChar(smallest.v) + " Wgt : " + smallest.wgt + " was added to MST");
             }
 
+            else
+            {
+                System.out.println("\nEdge " + toChar(smallest.u) + " -> " + toChar(smallest.v) + " Wgt : " + smallest.wgt + " NOT ADDED AS MST ALREADY CONTAINS BOTH VERTICES");
+            }
             partition.showTrees();
-            partition.printParent();
+            //partition.printParent();
         }
         return mst;
     }
