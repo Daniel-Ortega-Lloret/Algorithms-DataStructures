@@ -51,7 +51,8 @@ class Heap
         a[0] = 0;    // consider 0 as a kind of dummy heap value
         dist[0] = 0; // pay close attention to this, smaller dist means higher priority
 
-        while( dist[v] < dist[a[k/2]] ) {
+        while ( dist[v] < dist[a[k/2]] ) 
+        {
             a[k] = a[k/2];
             hPos[a[k]] = k;
             k = k/2;
@@ -66,7 +67,8 @@ class Heap
         int v, j;
         v = a[k];  
 
-        while( k <= N/2) {
+        while ( k <= N/2) 
+        {
             j = 2 * k;
             if(j < N && dist[a[j]] > dist[a[j+1]]) ++j;
             if( dist[v] <= dist[a[j]]) break;
@@ -104,62 +106,82 @@ class Heap
         return (char)(u + 64);
     }
 
-    void display() {
+    void display() 
+    {
         System.out.println("\nThe tree structure of the heaps is:");
         System.out.println( toChar(a[1]) + "(" + dist[a[1]] + ")" );
-        for(int i = 1; i<= N/2; i = i * 2) {
-            for(int j = 2*i; j < 4*i && j <= N; ++j)
+
+        for(int i = 1; i<= N/2; i = i * 2) 
+        {
+            for (int j = 2*i; j < 4*i && j <= N; ++j)
+            {
                 System.out.print( toChar(a[j]) + "(" + dist[a[j]] + ")  ");
+            }
+                
             System.out.println();
         }
     }
 
-    public void showDist(int size){
+    public void showDist(int size)
+    {
         System.out.println("Dist:");  
         for (int i = 0; i < size ; i++)
-        System.out.print(dist[i] + " "); 
+        {
+            System.out.print(dist[i] + " "); 
+        }
     }
 
-    public void showHPos(int size){
+    public void showHPos(int size)
+    {
         System.out.println("hPos:");  
         for (int i = 0; i < size ; i++)
-        System.out.print(hPos[i] + " "); 
+        {
+            System.out.print(hPos[i] + " "); 
+        }
     }
 
 }
 
-class Queue {
-
-    private class Node {
+class Queue 
+{
+    private class Node 
+    {
         int data;
         Node next;
     }
 
     Node z, head, tail;
 
-    public Queue() {
+    public Queue() 
+    {
         z = new Node(); z.next = z;
         head = z;  tail = null;
     }
    
 
-    public void enQueue(int x) {
+    public void enQueue(int x) 
+    {
         Node t;
 
         t = new Node();
         t.data = x;
         t.next = z;
 
-        if(head == z)       // case of empty list
+        if (head == z)       // case of empty list
+        {
             head = t;
+        }
         else                // case of list not empty
+        {
             tail.next = t;
+        }
             
         tail = t;           // new node is now at the tail
     }
 
   // assume the queue is non-empty when this method is called
-    public int deQueue() {
+    public int deQueue() 
+    {
         int value;
         value = head.data;
         
@@ -169,7 +191,8 @@ class Queue {
     }
     
 
-    public boolean isEmpty() {
+    public boolean isEmpty() 
+    {
         return head == head.next;
     }
 }
@@ -226,7 +249,7 @@ class Graph
         //Initialize visited to size of given graph  
         adj = new Node[V+1];    
         visited = new int[V+1];  
-        for(v = 1; v <= V; ++v)
+        for (v = 1; v <= V; ++v)
         {
             adj[v] = z;  
             visited[v] = 0;
@@ -234,7 +257,7 @@ class Graph
 
        // read the edges
         System.out.println("Reading edges from text file");
-        for(e = 1; e <= E; ++e)
+        for (e = 1; e <= E; ++e)
         {
             line = reader.readLine();
             parts = line.split(splits);
@@ -257,6 +280,7 @@ class Graph
             y.next = adj[v];
             adj[v] = y;
         }	
+
         reader.close();
     }
    
@@ -272,10 +296,10 @@ class Graph
         int v;
         Node n;
         
-        for(v=1; v<=V; ++v)
+        for (v=1; v<=V; ++v)
         {
             System.out.print("\nadj[" + toChar(v) + "] ->" );
-            for(n = adj[v]; n != z; n = n.next) 
+            for (n = adj[v]; n != z; n = n.next) 
             {
                 System.out.print(" |" + toChar(n.vert) + " | " + n.wgt + "| ->");   
             }
@@ -296,7 +320,8 @@ class Graph
         hPos = new int[V+1];
         Node u;
         
-        for (int i= 0; i< V+1; ++i) {
+        for (int i= 0; i< V+1; ++i) 
+        {
             dist[i] = Integer.MAX_VALUE;
             hPos[i] = 0;      // 0 indicates vertex is not in the heap
             parent[i] = 0;
@@ -312,20 +337,24 @@ class Graph
             System.out.print("\n\nMoving to node " + toChar(v));
 
             // look at every vertex adjacent to v
-            for(u = adj[v]; u != z; u = u.next){ 
+            for (u = adj[v]; u != z; u = u.next)
+            { 
                 wgt = u.wgt;
-                if(wgt < dist[u.vert]){
+                if (wgt < dist[u.vert])
+                {
                     d = dist[u.vert];    // remember the old weight so we can remove it from the sum
                     dist[u.vert] = wgt;
                     parent[u.vert] = v;
 
-                    if(hPos[u.vert] == 0){
+                    if (hPos[u.vert] == 0)
+                    {
                         h.insert(u.vert);   // insert vertex if not in heap
                         wgt_sum += wgt;
                         System.out.println("\nchecking " + toChar(u.vert) + ", with weight of " + wgt );
                         System.out.println("weight of tree is now " + wgt_sum);
                     }
-                    else{
+                    else
+                    {
                         wgt_sum -= d; // remove old weight value from sum
                         h.siftUp(hPos[u.vert]);  //   if vertex is already in heap, sift up
                         wgt_sum += wgt;
@@ -340,16 +369,20 @@ class Graph
             // System.out.println();
             // h.showHPos(V+1);
        }
+
         System.out.print("\nWeight of MST = " + wgt_sum + "\n");
         System.out.println("Vertex\tParent");  
+
         for (int i = 1; i <= V; i++)  
-        System.out.println(toChar(i) + "\t" + toChar(parent[i])); 
+        {
+            System.out.println(toChar(i) + "\t" + toChar(parent[i])); 
+        }
 	}
     
     public void showMST()
     {
         System.out.print("\n\nMinimum Spanning tree parent array is:\n");
-        for(int v = 1; v <= V; ++v)
+        for (int v = 1; v <= V; ++v)
         {
             System.out.println(toChar(v) + " -> " + toChar(mst[v]));
         }
@@ -372,12 +405,14 @@ class Graph
         Heap pq;
         Node u;
 
-        for (int i= 0; i< V+1; ++i) {
+        for (int i= 0; i< V+1; ++i) 
+        {
             dist[i] = Integer.MAX_VALUE;
             hPos[i] = 0;      // 0 indicates vertex is not in the heap
             parent[i] = 0;
 
         }
+
         pq = new Heap(V,dist,hPos);   // Priority queue is initially empty
         v = s;  // s is the root of the SPT
         dist[s] = 0;
@@ -388,22 +423,28 @@ class Graph
 
         while(!pq.isEmpty()){    // repeats until heap is empty (V-1 times)
             // look at every vertex adjacent to v
-            for(u = adj[v]; u != z; u = u.next){
+            for (u = adj[v]; u != z; u = u.next)
+            {
                 wgt = u.wgt;
-                if(dist[v] + wgt < dist[u.vert]){
+                if (dist[v] + wgt < dist[u.vert])
+                {
                     dist[u.vert] = dist[v] + wgt;
                     System.out.print("\nChecking Node " + toChar(u.vert));
                     System.out.print("\nThe distance to " + toChar(u.vert) + " is now " + dist[u.vert]);
                     System.out.println();
-                    if(hPos[u.vert] == 0){
+                    if(hPos[u.vert] == 0)
+                    {
                         pq.insert(u.vert);   // insert vertex if not in heap
                     }
-                    else{
+                    else
+                    {
                         pq.siftUp(hPos[u.vert]);   // otherwise, sift up
                     }
+                    
                     parent[u.vert] = v;     // record its new parent vertex
                 }
             } 
+
             // print statements to show heap, dist, and hpos after each iteration
             // pq.display();
             // pq.showDist(V+1);
@@ -413,76 +454,90 @@ class Graph
             v = pq.remove();      
             System.out.print("\nmoving to node " + toChar(v) + "\n");      
         }
+
         System.out.println();
         System.out.println("Shortest Path Tree as it is built is: \n");  
-        System.out.println("Vertex\tParent\tDistance from root");  
+        System.out.println("Vertex\tParent\tDistance from root");
+
         for (int i = 1; i <= V; i++)  
-        System.out.println(toChar(i) + "\t" + toChar(parent[i]) + "\t" + dist[i]); 
+        {
+            System.out.println(toChar(i) + "\t" + toChar(parent[i]) + "\t" + dist[i]);
+        }
+
     }
 
+    // Breadth-First Traversal using a queue
     public void breadthFirst(int s)
     {
-        System.out.println("\nBreadth-First Graph Traversal\n");
-        System.out.println("Starting At Vertex " + toChar(s) + " Visiting Children");
         // Make The Distance Array, And Parent Array
         int[]  dist, parent;
         int[] Neighbors;
         dist = new int[V+1];
         parent = new int[V + 1];
-        Neighbors = new int[V];
+        Neighbors = new int[V]; // array to store all adjacent nodes of current node
+        colour = new C[V+1]; // stores colour status of each vertex
 
         // Used For Storing Dequeued Value
         int u;
 
-
         // Set All Vertices To White
-        for (int i = 0; i < V; i++)
+        for (int i = 0; i <= V; i++)
         {
-            visited[i] = 0;
+            colour[i] = C.White;
             dist[i] = Integer.MAX_VALUE;
             parent[i] = 0;
         }
 
+        System.out.println("\nBreadth-First Graph Traversal\n");
+        System.out.println("Starting At Vertex " + toChar(s) + " Visiting Children");
+
         // Make First Vertex Grey
-        visited[s] = 1;
-        dist[s] = 0;
+        colour[s] = C.Gray;
+
+        // Set parent & distance of first vertex to 0
+        dist[s] = 0; 
         parent[s] = 0;
 
         Queue Q = new Queue();
         
-        Q.enQueue(s);
+        Q.enQueue(s); // place first vertex first into the queue
+
         while (!Q.isEmpty())
         {
-            u = Q.deQueue();
-            //System.out.println("Dequeued " + toChar(u) + " From Queue.\n");
+            u = Q.deQueue(); // removes queue vertex and stores it temporarily
 
-            Neighbors = NeighborCount(u);
+            Neighbors = NeighborCount(u); // list of adjacent nodes of current node
+
             // For Every Child Of U
             for (int v : Neighbors)
             {
                 // If Child Is White
-                if (visited[v] == 0)
+                if (colour[v] == C.White)
                 {
-                    visited[v] = 1;
-                    dist[v] = dist[u] + 1;
+                    colour[v] = C.Gray; // mark child as visited
+                    dist[v] = dist[u] + 1; // record distance
                     parent[v] = u;
-                    Q.enQueue(v);
+                    Q.enQueue(v); //visit child
+
                     System.out.println("\nBFS just visited vertex " + toChar(v) + " along edge " + toChar(u) + "--" + toChar(v));
                 }
             }
+
             // When Done With Parent Make It Black
-            visited[u] = 2;
+            colour[u] = C.Black;
         }
     }
 
     //Recursive Depth-First Traversal
     public void DF(int s)
     {
-        int v;
-        colour = new C[V+1];
-        parent = new int[V+1];
-        d = new int[V+1];
-        inOrder = new int[V+1];
+        int v; // var for loops
+
+        colour = new C[V+1]; // stores colour status of each vertex
+        parent = new int[V+1]; // stores parent node of each vertex
+        d = new int[V+1]; // distance array
+
+        // Initializes colour and parent arrays with empty/unvisited values before algorithm starts
         for (v = 1; v <= V; ++v)
         {
             colour[v] = C.White;
@@ -492,6 +547,7 @@ class Graph
         System.out.println("\nDepth-First Graph Traversal\n");
         System.out.println("Starting with Vertex " + toChar(s));
 
+        // Visits every node marked as unvisited(White)
         for (v = 1; v <= V; ++v)
         {
             if (colour[v] == C.White)
@@ -503,15 +559,21 @@ class Graph
         System.out.print("\n\n");
     }
 
+    // Recursive Depth-First Search Algorithm
     private void dfVisit( int u)
     {
+        // integer list representation of all the vertices neighboring the current vertex
         int[] neighbors = NeighborCount(u);
+
+        // Marks current vertex as visited
         colour[u] = C.Gray;
 
         System.out.println("\n DF just visited vertex " + toChar(u) + " along edge " + toChar(parent[u]) + "--" + toChar(u));
 
+        //Foreach loop that iterates for however many neighbors the current vertex has
         for ( int v : neighbors)
         {
+            // If neighboring vertex is unvisited, mark its parent as the current vertex, record its distance, and visit it.
             if (colour[v] == C.White)
             {
                 parent[v] = u;
@@ -520,6 +582,7 @@ class Graph
             }
         }
 
+        //Mark current vertex as processed
         colour[u] = C.Black;
     }
 
