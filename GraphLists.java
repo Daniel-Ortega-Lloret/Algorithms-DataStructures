@@ -334,7 +334,7 @@ class Graph
         {
             v = h.remove();     // v is added to the MST
             dist[v] = -dist[v];     // Marking v as added to the MST
-            System.out.print("\n\nNow on node " + toChar(v));
+            System.out.print("\n\nMoving to node " + toChar(v));
 
             // look at every vertex adjacent to v
             for (u = adj[v]; u != z; u = u.next)
@@ -350,8 +350,7 @@ class Graph
                     {
                         h.insert(u.vert);   // insert vertex if not in heap
                         wgt_sum += wgt;
-
-                        System.out.println("\nvisiting " + toChar(u.vert) + ", with weight of " + wgt );
+                        System.out.println("\nchecking " + toChar(u.vert) + ", with weight of " + wgt );
                         System.out.println("weight of tree is now " + wgt_sum);
                     }
                     else
@@ -359,8 +358,7 @@ class Graph
                         wgt_sum -= d; // remove old weight value from sum
                         h.siftUp(hPos[u.vert]);  //   if vertex is already in heap, sift up
                         wgt_sum += wgt;
-
-                        System.out.println("\nvisiting " + toChar(u.vert) + " again, found shorter weight of " + wgt );
+                        System.out.println("\nchecking " + toChar(u.vert) + " again, found shorter weight of " + wgt );
                         System.out.println("weight of tree is now " + wgt_sum);
                     }
                 }
@@ -420,10 +418,10 @@ class Graph
         dist[s] = 0;
 
         pq.insert(s);
+        System.out.print("\n\nStarting on node " + toChar(v) + "\n");
 
-        while (!pq.isEmpty())
-        {    // repeats until heap is empty (V-1 times)
-            System.out.print("\n\nNow on node " + toChar(v));
+
+        while(!pq.isEmpty()){    // repeats until heap is empty (V-1 times)
             // look at every vertex adjacent to v
             for (u = adj[v]; u != z; u = u.next)
             {
@@ -431,7 +429,7 @@ class Graph
                 if (dist[v] + wgt < dist[u.vert])
                 {
                     dist[u.vert] = dist[v] + wgt;
-                    System.out.print("\nVisiting Node " + toChar(u.vert));
+                    System.out.print("\nChecking Node " + toChar(u.vert));
                     System.out.print("\nThe distance to " + toChar(u.vert) + " is now " + dist[u.vert]);
                     System.out.println();
                     if(hPos[u.vert] == 0)
@@ -453,7 +451,8 @@ class Graph
             // System.out.println();
             // pq.showHPos(V+1);
 
-            v = pq.remove();            
+            v = pq.remove();      
+            System.out.print("\nmoving to node " + toChar(v) + "\n");      
         }
 
         System.out.println();
