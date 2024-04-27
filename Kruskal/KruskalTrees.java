@@ -2,7 +2,6 @@
 // Union-find implemented using disjoint set trees without compression
 
 import java.io.*;
-import java.util.HashSet;    
  
 // Stores Information Of Each Edge
 class Edge 
@@ -182,10 +181,13 @@ class UnionFindSets
     {
         int u, root;
         int[] shown = new int[N+1];
+
         for (u=1; u<=Graph.V; ++u)
         {   
             root = findSet(u);
-            if(shown[root] != 1) {
+
+            if(shown[root] != 1) 
+            {
                 showSet(root);
                 shown[root] = 1;
             }            
@@ -198,8 +200,13 @@ class UnionFindSets
         int v;
         System.out.print("Set{");
         for(v=1; v<=N; ++v)
+        {
             if(findSet(v) == root)
+            {
                 System.out.print(toChar(v) + " ");
+            }
+        }
+           
         System.out.print("}  ");
     
     }
