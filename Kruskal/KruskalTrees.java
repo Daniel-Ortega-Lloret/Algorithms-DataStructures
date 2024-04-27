@@ -122,7 +122,6 @@ class UnionFindSets
     public UnionFindSets()
     {
         int V = Graph.V;
-        int N = V;
         Rank = new int[V + 1];  // Used For Union by Rank
         treeParent = new int[V + 1];
     }
@@ -292,9 +291,6 @@ class Graph
     **********************************************************/
     public Edge[] MST_Kruskal() 
     {
-        int ei;
-        Edge e;
-        int uSet, vSet;
         UnionFindSets partition;
         
         // create edge array to store MST
